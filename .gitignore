@@ -1,4 +1,4 @@
 # git ignore file for all non-disclosable test cases
 Sample_Data/*
 Test_Data/*
-/Reference
+/References
