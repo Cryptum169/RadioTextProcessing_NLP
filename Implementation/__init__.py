@@ -1,6 +1,7 @@
 import nlp
 import readFile as rf
 import json
+__transcribe__ = True
 
 def list2str(inlist):
     returnStr = "["
@@ -14,9 +15,18 @@ outputFile = open("Output.txt",'w')
 counter = 1
 for item in allTestCaseDir:
     testStr = rf.readSingleTestCases(item)
-    keyword = nlp.jieba_keyword(testStr)
-    outputFile.write(item + "\n")
-    outputFile.write(list2str(keyword) + "\n")
+
+    if __transcribe__:
+        name = item.split("/")
+        name = name[len(name) - 1]
+        transcript = open("Transcript/" + name + ".txt",'w')
+        transcript.write(item + "\n")
+        transcript.write(testStr)
+        transcript.close()
+
+    # keyword = nlp.jieba_keyword(testStr)
+    # outputFile.write(item + "\n")
+    # outputFile.write(list2str(keyword) + "\n")
 
     counter += 1
     if counter == int(len(allTestCaseDir) / 10):
