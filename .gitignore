@@ -3,3 +3,7 @@ Sample_Data/*
 Test_Data/*
 References/*
 Output/*
+Implementation/verification.py
+Implementation/asr-result
+Implementation/baiduasr-result
+Implementation/aliasr-result
