@@ -1,7 +1,9 @@
 import nlp
 import readFile as rf
 import json
-__transcribe__ = True
+
+__transcribe__ = False
+__keywordExtract__ = True
 
 def list2str(inlist):
     returnStr = "["
@@ -11,7 +13,6 @@ def list2str(inlist):
 
 allTestCaseDir = rf.retivAllCase()
 outputFile = open("Output.txt",'w')
-
 counter = 1
 for item in allTestCaseDir:
     testStr = rf.readSingleTestCases(item)
@@ -24,9 +25,10 @@ for item in allTestCaseDir:
         transcript.write(testStr)
         transcript.close()
 
-    # keyword = nlp.jieba_keyword(testStr)
-    # outputFile.write(item + "\n")
-    # outputFile.write(list2str(keyword) + "\n")
+    if __keywordExtract__:
+        keyword = nlp.jieba_keyword(testStr)
+        outputFile.write(item + "\n")
+        outputFile.write(list2str(keyword) + "\n")
 
     counter += 1
     if counter == int(len(allTestCaseDir) / 10):
