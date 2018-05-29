@@ -13,8 +13,8 @@ def list2str(inlist):
         returnStr += item + ", "
     return returnStr + "]"
 
-# allTestCaseDir = rf.retivAllCase()
-allTestCaseDir = 'Satellite.txt'
+allTestCaseDir = rf.retivAllCase()
+# allTestCaseDir = 'Satellite.txt'
 outputFile = open("Output.txt",'w')
 counter = 1
 for item in allTestCaseDir:
