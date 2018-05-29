@@ -3,7 +3,7 @@ import os
 
 def getTestDirectory():
     prtPath = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    testPath = prtPath + '/Implementation/asr-result/aliasr-result'
+    testPath = prtPath + '/Implementation/asr-result/baiduasr-result'
     # change to aliasr-result when processing Aliyun data 
     return testPath
 

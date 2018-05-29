@@ -1,3 +1,4 @@
 References: 
 AJMIDE 关键词自动摘要 李卫 2018.5.16
-结巴
+https://github.com/fxsjy/jieba
+Rose, Stuart & Engel, et al. (2010). Automatic Keyword Extraction from Individual Documents. Text Mining: Applications and Theory. 1 - 20.
