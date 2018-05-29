@@ -1,4 +1,5 @@
 # git ignore file for all non-disclosable test cases
+*.txt
 Sample_Data/*
 Test_Data/*
 References/*
@@ -7,3 +8,4 @@ Implementation/verification.py
 Implementation/asr-result
 Implementation/baiduasr-result
 Implementation/aliasr-result
+Implementation/asr-result
