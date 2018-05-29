@@ -1,13 +1,3 @@
 # git ignore file for all non-disclosable test cases
-*.txt
-Sample_Data/*
-Test_Data/*
-References/*
-Output/*
-Implementation/verification.py
-Implementation/asr-result
-Implementation/baiduasr-result
-Implementation/aliasr-result
-Implementation/asr-result
-Implementation/__pycache__
-Implementation/src/__pycache__
+data/audio_transcript
+Outputs/*
