@@ -61,8 +61,8 @@ if newModel:
     model.save('data/Model/gensimWord2Vec.bin')
     print('Done')
 
-print('相似度：交通 高架')
-print(model.similarity('交通', '高架'))
+# print('相似度：交通 高架')
+# print(model.similarity('交通', '高架'))
 # print('交通 车辆')
 # print(model.similarity('交通', '车辆'))
 # print('高架 车辆')
