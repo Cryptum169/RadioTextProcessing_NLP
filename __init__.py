@@ -1,73 +1,56 @@
-import re
-import os
-import jieba
-import logging
-import gensim
 import progressbar
 from xml.dom import minidom
-from tempfile import mkstemp
 
-newModel = False
-try:
-    model = gensim.models.Word2Vec.load('data/Model/gensimWord2Vec.bin')
-    print('Existing Model Found')
-except:
-    newModel = True
+xmldoc = minidom.parse('data/Corpus/sogou_corpus.dat')
 
-if newModel:
-    print('No existing model found')
-    # xmldoc = minidom.parse('data/Corpus/sogou_corpus.data.dat')
-    # itemlist = xmldoc.getElementsByTagName('content')
+contentList = xmldoc.getElementsByTagName('content')
+titleList = xmldoc.getElementsByTagName('contenttitle')
 
-    itemlist = []
-    prtPath = os.path.dirname(os.path.abspath(__file__))
-    currdir = 'Outputs/Audio2Text'
-    allFile = os.listdir(prtPath + '/' + currdir)
-    for anyFile in allFile:
-        with open(currdir + '/' + anyFile) as fp:
-            itemlist.append(fp.read())
+skipList = []
+counter = 0
+fileLength = len(contentList)
+fileCounter = 0
+txtCounter = 0
+with progressbar.ProgressBar(max_value=fileLength) as bar:
+    outStr = []
+    for v in contentList:
+        if type(v.firstChild) == type(None):
+            content  = ''
+            skipList.append(counter)
+        # else:
+            # content = v.firstChild.nodeValue
+            # outStr.append(content)
+        counter += 1
+        # fileCounter += 1
+        bar.update(counter)
 
-    logging.basicConfig(level=logging.INFO)
-    resultList = []
+        # if (fileCounter == int(fileLength / 10)):
+        #     txtCounter += 1
+        #     with open('sogou/content' + str(txtCounter) + '.txt','w') as fp:
+        #         outStr = '\n'.join(str(v) for v in outStr)
+        #         fp.write(outStr)
+        #     fileCounter = 0
+        #     outStr = []
 
-    counter = 0.0
-    barVal = 0
-    with progressbar.ProgressBar(max_value=100) as bar:
-        print('Loading and Parsing Text')
-        for article in itemlist:
-            barVal = counter / len(itemlist) * 100
-            # Error Handling
-            # try:
-            #     val = article.firstChild.nodeValue
-            # except:
-            #     continue
-            val = article
+outStr = []
+fileCounter = 0
+txtCounter = 0
+counter = 0
+with progressbar.ProgressBar(max_value=fileLength) as bar:
+    for v in titleList:
+        if type(v.firstChild) == type(None) or counter in skipList:
+            title = ''
+        else:
+            title = v.firstChild.nodeValue
+            outStr.append(title)
+        counter += 1
+        fileCounter += 1
+        bar.update(counter)
 
-            if not isinstance(val, str):
-                continue
-
-            sentenceList = re.split('\。|，|…|', val)
-
-            curr = []
-            for sentence in sentenceList:
-                curr.append(jieba.lcut(sentence))
-            resultList.extend(curr)
-
-            bar.update(barVal)
-            counter += 1
-
-    # print(resultList)
-    model = gensim.models.Word2Vec(resultList, min_count=1)
-    model.save('data/Model/gensimWord2Vec.bin')
-    print('Done')
-
-# print('相似度：交通 高架')
-# print(model.similarity('交通', '高架'))
-# print('交通 车辆')
-# print(model.similarity('交通', '车辆'))
-# print('高架 车辆')
-# print(model.similarity('高架', '车辆'))
-# print('事故 道路')
-# print(model.similarity('事故', '道路'))
-# print('车辆 音乐')
-# print(model.similarity('车辆', '音乐'))
+        if (fileCounter == int(fileLength / 10)):
+            txtCounter += 1
+            with open('sogou/title' + str(txtCounter) + '.txt','w') as fp:
+                outStr = '\n'.join(str(v) for v in outStr)
+                fp.write(outStr)
+            fileCounter = 0
+            outStr = []

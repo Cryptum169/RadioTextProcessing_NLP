@@ -1,6 +1,5 @@
 import gensim
 
-
 model_sogou = gensim.models.Word2Vec.load('data/Model/gensimWord2Vec.bin')
 model_audio = gensim.models.Word2Vec.load('data/Model/gensimWord2Vec_audio.bin')
 
