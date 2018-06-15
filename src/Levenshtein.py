@@ -8,7 +8,8 @@ import numpy as np
 from scipy.spatial import distance
 from pathlib import Path
 
-def sentence_similarity(input1, input2, model=None):
+def sentence_similarity(input1, input2, model = None):
+    # Word2Vec Cosine distance
     if len(input1) == 0 or len(input2) == 0:
         if len(input1) == 0:
             return len(input2)
@@ -19,18 +20,18 @@ def sentence_similarity(input1, input2, model=None):
         print('No Model passed into function, run word2Vec_generation.py')
         exit()
 
+    # Sum up word vectors in sentence, average to get sentence vector
     input1_vector = np.ndarray(100)
     for element in input1:
         input1_vector = np.add(input1_vector, model[element])
     input1_vector = np.divide(input1_vector, len(input1)).ravel()
-    # print(input1_vector)
 
     input2_vector = np.ndarray(100)
     for element in input2:
         input2_vector = np.add(input2_vector, model[element])
     input2_vector = np.divide(input2_vector, len(input2)).ravel()
-    # print(input2_vector)
 
+    # Return distance
     return distance.cosine(input1_vector, input2_vector)
 
 def levenshtein_distance(input1 = [], input2 = []):
@@ -66,29 +67,32 @@ def levenshtein_distance(input1 = [], input2 = []):
     return matrix[l1][l2]
 
 def similarity(input1, input2, alpha = 0.75, model = None):
+    if model == None:
+        model = load_model()
     sentence1 = jieba.lcut(input1)
     sentence2 = jieba.lcut(input2)
 
     levdis = 2/(math.exp(levenshtein_distance(sentence1, sentence2)/1.5 - 4) + 1) - 1
-    print("Levdis: {}".format(levdis))
     word2vec = sentence_similarity(sentence1, sentence2, model = model)
-    print("word2vec: {}".format(word2vec))
     return alpha * word2vec + (1 - alpha) * levdis
+
+def load_model():
+    model_str_path = os.path.dirname(os.path.dirname(
+            os.path.abspath(__file__))) + '/' + 'data/Model/gensimWord2Vec.bin'
+    model_path = Path(model_str_path)
+    if model_path.is_file():
+        print('Loading Existing Model')
+        model = gensim.models.Word2Vec.load(model_str_path)
+    else:
+        print('No Model found, run word2Vec_generation.py')
+        exit()
+    return model
 
 if __name__ == '__main__':
     if len(sys.argv) != 3:
         print('Please call the function by python Levenshtein.py arg1 arg2')
     else:
-        model_str_path = os.path.dirname(os.path.dirname(
-            os.path.abspath(__file__))) + '/' + 'data/Model/gensimWord2Vec.bin'
-        model_path = Path(model_str_path)
-        if model_path.is_file():
-            print('Loading Existing Model')
-            model = gensim.models.Word2Vec.load(model_str_path)
-        else:
-            print('No Model found, run word2Vec_generation.py')
-            exit()
-
+        model = load_model()
         sim_value = similarity(sys.argv[1], sys.argv[2], model = model)
         print('Input1: {}, Input2: {}, simValue = {}'.format(
             sys.argv[1], sys.argv[2], sim_value))
