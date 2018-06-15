@@ -23,12 +23,18 @@ def sentence_similarity(input1, input2, model = None):
     # Sum up word vectors in sentence, average to get sentence vector
     input1_vector = np.ndarray(100)
     for element in input1:
-        input1_vector = np.add(input1_vector, model[element])
+        try:
+            input1_vector = np.add(input1_vector, model[element])
+        except:
+            pass
     input1_vector = np.divide(input1_vector, len(input1)).ravel()
 
     input2_vector = np.ndarray(100)
     for element in input2:
-        input2_vector = np.add(input2_vector, model[element])
+        try:
+            input2_vector = np.add(input2_vector, model[element])
+        except:
+            pass
     input2_vector = np.divide(input2_vector, len(input2)).ravel()
 
     # Return distance
@@ -64,15 +70,20 @@ def levenshtein_distance(input1 = [], input2 = []):
             cost = 0 if input1[i - 1] == input2[j - 1] else 1
             cost += matrix[i-1][j-1]
             matrix[i][j] = min(cellabove, cellleft, cost)
+    # val = matrix[l1][l2]
     return matrix[l1][l2]
 
-def similarity(input1, input2, alpha = 0.75, model = None):
+def similarity(input1, input2, alpha = 0.75, model = None, leven = False):
+    # Input as whole sentences
     if model == None:
+        # Load model inside lt.similarity
         model = load_model()
-    sentence1 = jieba.lcut(input1)
-    sentence2 = jieba.lcut(input2)
+    sentence1 = input1
+    sentence2 = input2
 
-    levdis = 2/(math.exp(levenshtein_distance(sentence1, sentence2)/1.5 - 4) + 1) - 1
+    levdis = 0
+    if leven:
+        levdis = 1/(math.exp(levenshtein_distance(sentence1, sentence2)/min(len(sentence1), len(sentence2)) * 10 - 5) + 1)
     word2vec = sentence_similarity(sentence1, sentence2, model = model)
     return alpha * word2vec + (1 - alpha) * levdis
 
