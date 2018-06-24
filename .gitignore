@@ -19,6 +19,7 @@ data/Sogou
 ## Filtered Sogou News Corpus, eliminated Ads, 
 Outputs/sogou
 Outputs/Training_Set
+Outputs/Revised_Corpus
 
 # Pycache ignore
 src/__pycache__
