@@ -41,13 +41,13 @@ def sentence_similarity(input1, input2, model = None):
     return distance.cosine(input1_vector, input2_vector)
 
 def levenshtein_distance(input1 = [], input2 = []):
+    # Input1 and Input2 as already Jieba segmented sentence
     if len(input1) == 0 or len(input2) == 0:
         if len(input1) == 0:
             return len(input2)
         else:
             return len(input1)
 
-    # Input1 and Input2 as already Jieba segmented sentence
     # Jieba Default Logging set to DEBUG wtf dude
     l1 = len(input1)
     l2 = len(input2)

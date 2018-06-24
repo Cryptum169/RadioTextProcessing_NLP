@@ -3,11 +3,11 @@
  Q as Content, A as title
  file 1 to 10 as content1.txt to content10.txt, similar nomenclature for title.txt
 '''
-__restart__ = False
+__restart__ = True
 if __restart__:
     path = 'Outputs/Revised_Corpus'
 else:
-    path = 'sogou/test'
+    path = 'sogou/6.19 - Revised'
 
 # import jieba
 import progressbar
@@ -18,14 +18,14 @@ with progressbar.ProgressBar(max_value=10) as bar:
         contentLines = []
         title_skipList = []
         titleLines = []
-        with open(path + '/content' + str(i) + '.txt', 'r') as fp:
+        with open(path + '/content' + str(i) + '.txt', 'r', encoding = "utf-8") as fp:
             contentLines = [line[:-1] for line in fp]
             counter = 0
             last = ['”', '。', '＂', '！','？']
             for content in contentLines:
 
                 if __restart__:
-                    if len(content) > 600 or len(content) < 200:
+                    if len(content) > 500 or len(content) < 200:
                         content_skipList.append(counter)
                         counter += 1
                         continue
@@ -118,7 +118,12 @@ with progressbar.ProgressBar(max_value=10) as bar:
 
             for content in titleLines:
                 if __restart__:
-                    if len(content) > 600 or len(content) < 12:
+                    if len(content) > 30 or len(content) < 12:
+                        title_skipList.append(counter)
+                        counter += 1
+                        continue
+
+                    if content[-1] == '…':
                         title_skipList.append(counter)
                         counter += 1
                         continue
@@ -163,16 +168,16 @@ with progressbar.ProgressBar(max_value=10) as bar:
             del contentLines[index]
             del titleLines[index]
 
-        print('Data Set {} has {} content lines and {} title lines'.format(str(i), str(len(contentLines)), str(len(titleLines))))
+        # print('Data Set {} has {} content lines and {} title lines'.format(str(i), str(len(contentLines)), str(len(titleLines))))
         if len(contentLines) != len(titleLines):
             raise Exception('Unequal number of content and title lines')
         else:
             total_dataset_num += len(contentLines)
 
-        with open('sogou/test/content' + str(i) + '.txt', 'w') as fp:
+        with open('sogou/6.19 - Revised/content' + str(i) + '.txt', 'w') as fp:
             fp.write('\n'.join(contentLines))
 
-        with open('sogou/test/title' + str(i) + '.txt', 'w') as fp:
+        with open('sogou/6.19 - Revised/title' + str(i) + '.txt', 'w') as fp:
             fp.write('\n'.join(titleLines))
 
         bar.update(i)

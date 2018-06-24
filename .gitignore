@@ -1,5 +1,29 @@
-# git ignore file for all non-disclosable test cases
-data/
-Outputs/*
-sogou/
+# Files Cannot be released
+## Internal Audio2Text transcript file
+data/audio_transcript
+
+## Processed audio2text file
+Outputs/Audio2Text
+
+## Link Internal Audio2Text transcript with abstracts
+Outputs/csv_Input
+Outputs/csv_Output
+
+# Files too large to be uploaded to Github, They can be found on Sogou Lab
+## Gensim Word2Vec Model file
+data/Model
+## Sogou Corpus Data, 2.~ GB
+data/Corpus/sogou_corpus.dat
+## Processed Sogou Corpus Data. 
+data/Sogou
+## Filtered Sogou News Corpus, eliminated Ads, 
+Outputs/sogou
+Outputs/Training_Set
+
+# Pycache ignore
 src/__pycache__
+
+# WiP
+doc2vec_tg/
+
+.vscode
